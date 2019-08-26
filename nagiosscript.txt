@@ -1,0 +1,121 @@
+UBUNTU 14.04 NAGIOS CORE INSTALLATION
+
+  273  useradd nagios
+  274  groupadd nagcmd
+  275  usermode -a -G nagcmd nagios
+  276  usermod -a -G nagcmd nagios
+  277  apt-get update
+  278  apt-get install build-essential libgd2-xpm-dev openssl libssl-dev xinetd apache2-utils unzip
+  279  wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.2.4.tar.gz#_ga=1.262890446.398721054.1484730307
+  280  tar -xvf nagios-4.2.4.tar.gz
+  281  ls
+  282  apt-get install gcc make
+  283  apt-get install autoconf
+  284  apt-get install bc dc
+  285  apt-get install apache2
+  286  wget https://nagios-plugins.org/download/nagios-plugins-2.1.4.tar.gz#_ga=1.41160032.398721054.1484730307
+  287  ls
+  288  cd nagios-4.2.4/
+  289  ls
+  290  history
+  291  ls
+  292  usermod -a -G nagcmd www-data
+  293  cd nagios-4.2.4/
+  294  ls
+  295  #./configure --with-command-group=nagcmd
+  296  lsb_release
+  297  lsb_release -a
+  298  cat /etc/passwd
+  299  ./configure --with-command-group=nagcmd
+  300  ls
+  301  make all
+  302  make install
+  303  make install-init
+  304  make install-config
+  305  make install-commandmode
+  306  ls
+  307  make install-webconf
+  308  ls /etc/apache2/sites-available/
+  309  passwd nagios
+  310  htpasswd -c /usr/local/nagios/etc/htpasswd.users nagiosadmin
+  311  service apache2 restart
+  312  cd
+  313  ls
+  314  tar -xvf nagios-plugins-2.1.4.tar.gz
+  315  ;s
+  316  ls
+  317  cd nagios-plugins-2.1.4/
+  318  ls
+  319  ./configure --with-nagios-user=nagios --with-nagios-group=nagios
+  320  make
+  321  make install
+  322  update-rc.d -
+  323  update-rc.d
+  324  manupdate-rc.d
+  325  man update-rc.d
+  326  update-rc.d nagios on
+  327  update-rc.d nagios enable
+  328  update-rc.d nagios defaults
+  329  ls
+  330  cd
+  331  vim /usr/local/nagios/etc/objects/contacts.cfg    --need to edit this file to send emails to specifics
+  332  vim /etc/apache2/sites-enabled/nagios.conf        --Edit this file if you want to allow certain users(Private IPs inhouse) internally in your organization otherwise dont edit.
+  333  a2enmod rewrite
+  334  a2enmod cgi
+  335  service apache2 restart
+  336  /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg   --To verify for errors and warnings for files (for every restart of service nagios firstly hit this command).
+
+Disable selinux if it is on(How to search on google as per your distributions)
+
+  342  cd
+  343  service nagios start
+  344  ps -eaf | grep nagios
+
+check hosturl/nagios in browser if working
+
+if some error on web UI then do specifically for UBUNTU 16.04     
+    sudo add-apt-repository ppa:ondrej/php
+    apt-get update && apt-get install php5.6
+
+  351  vim /etc/apache2/sites-available/nagios.conf       --dont edit this file ...if want to add certain ips who can access it then only edit it..
+  352  service nagios restart
+  353  service nagios stop
+  354  /usr/local/nagios/bin/nagios -v /usr/local/nagios/etc/nagios.cfg
+  355  service nagios start
+  356  vim /etc/apache2/sites-available/nagios.conf
+  357  vim /etc/apache2/sites-enabled/nagios.conf
+  359  service nagios stop
+  360  cat /etc/apache2/sites-enabled/nagios.conf
+  361  vim /etc/apache2/sites-enabled/nagios.conf
+  362  ps -eaf | grep nagios
+  363  service apache2 restart
+  364  service nagios start
+  365  ps -eaf | grep nagios
+  366  cat /var/log/apache2/error.log
+  367  cd /var/log/apache2/
+  368  ls -lrth
+  369  vim error.log
+  370  vim access.log
+  371  cd
+  372  service nagios stop
+  373  service apache2 stop
+  374  vim /etc/hosts
+  375  service apache2 start
+  376  service nagios start
+  377  cat /etc/hosts
+  378  service nagios stop
+  379  service apache2 stop
+  380  vim /etc/hosts
+  381  service nagios start
+  382  service apache2 start
+  383  netstat -tnlp | grep 80
+  384  netstat -tnlp | grep apache2
+  391  cd
+  392  apt-get install build-essential php5-gd wget libgd2-xpm-dev libapache2-mod-php5 apache2-utils daemon unzip   ---Was showing error while accessing ip/nagios ERROR(The 
+requested URL /nagios/< was not found on this server)  ....thats y i installed some of the dependencies
+  393  service apache2 stop
+  394  service nagios stop
+  395  cat /etc/apache2/sites-available/nagios.conf
+  396  service nagios start
+  397  service apache2 start
+  398  history

@@ -1,0 +1,104 @@
+Create data
+
+Create a table
+
+create 'sensor','temp','vibration','pressure'
+hadoop fs -put hbase.csv /tmp/
+hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.separator=,  -Dimporttsv.columns="HBASE_ROW_KEY,id,temp:in,temp:out,vibration,pressure:in,pressure:out" sensor hdfs://sandbox.hortonworks.com:/tmp/hbase.csv
+
+
+
+Creating table  us_population
+
+CREATE TABLE IF NOT EXISTS us_population (
+      state CHAR(2) NOT NULL,
+      city VARCHAR NOT NULL,
+      population BIGINT
+      CONSTRAINT my_pk PRIMARY KEY (state, city));
+
+Create data us_population.csv
+
+NY,New York,8143197
+CA,Los Angeles,3844829
+IL,Chicago,2842518
+TX,Houston,2016582
+PA,Philadelphia,1463281
+AZ,Phoenix,1461575
+TX,San Antonio,1256509
+CA,San Diego,1255540
+TX,Dallas,1213825
+CA,San Jose,912332 
+
+
+Load:
+/usr/hdp/2.5.6.0-40/phoenix/bin/psql.py -t US_POPULATION  localhost /var/tmp/us_population.csv
+
+query:
+SELECT state as "State",count(city) as "City Count",sum(population) as "Population Sum"
+FROM us_population
+GROUP BY state
+ORDER BY sum(population) DESC;
+
+
+*Exporting data from hbase into csv
+
+1)!outputformat csv
+2)!record <filename>.csv
+3)select * from cloud3.main (query to be executed)
+4)ctrl d
+
+/*
+EXPORTING(Downloading) data-- export the contents of the table to sequence files in a given directory 
+
+hbase org.apache.hadoop.hbase.mapreduce.Export TEST2 /export_directory
+hbase org.apache.hadoop.hbase.mapreduce.Import TEST2 /import_directory
+
+*/
+
+Please tell this issue of hbase 
+* Secondary indexes issues Pheonix 
+
+In hbase-site.xml Add property of WALCoDec
+
+hbase.regionserver.wal.codec=org.apache.hadoop.hbase.regionserver.wal.WALCellCodec
+hbase.regionserver.wal.codec=org.apache.hadoop.hbase.regionserver.wal.IndexedWALEditCodec
+
+* NTP issue - Stay calm and observe things 
+
+* *Phoenix Time out issue resolved
+
+https://community.hortonworks.com/articles/49037/phoenix-sqlline-query-on-larger-data-set-fails-wit.html
+
+
+Please add this monitoring task
+
+*Ambari HDFS view
+
+http://docs.hortonworks.com/HDPDocuments/Ambari-2.1.0.0/bk_ambari_views_guide/content/_configuring_your_cluster_for_files_view.html
+
+*Cloudera Read only user creation
+
+https://www.cloudera.com/documentation/enterprise/5-5-x/topics/cm_sg_user_roles.html
+
+*Hue user creation
+
+
+
+
+LINUX QUESTIONS:
+
+1) How to check the pid of some jar is running ? what cmd?
+2) How to check port no specific to that jar ?
+3) How to check processes using files or socket()?
+4) How to configure static ip for server
+5) Command to rename? check the which os version
+6) Boot process
+7) How to open and close port using a firewall(csf) ?
+cd /usr/src; wget https://download.configserver.com/csf.tgz ; tar -xzf csf.tgz ; cd csf; sh install.sh ; 
+8) If webpage not loading what command to use on cmd to check working of webui ambari
+9) How to use two version of any software suppose python
+10) Which log file to check when facing issues related to authentication
+11) what to check if some hadoop service is down ? which ?
+12) How to apply patch ? how many ways
+13) Connection refuse error or any such error ? steps 
+14) if my disk fails and i have to attach new disks what is the procedure ?  Two questions ? is new disk empty ? or full ?

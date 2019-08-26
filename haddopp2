@@ -1,0 +1,108 @@
+# configure core-site.xml
+sed -i '20i <property>\n  <name>fs.defaultFS</name>\n  <value>hdfs://'"$MASTER_NAME"':9000</value>\n</property>' $HADOOP_HOME/etc/hadoop/core-site.xml
+
+# configure yarn-site.xml
+sed -i '18i <property>\n  <name>yarn.nodemanager.aux-services</name>\n  <value>mapreduce_shuffle</value>\n</property>' $HADOOP_HOME/etc/hadoop/yarn-site.xml
+sed -i '22i <property>\n  <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>\n  <value>org.apache.hadoop.mapred.ShuffleHandler</value>\n</property>' $HADOOP_HOME/etc/hadoop/yarn-site.xml
+sed -i '26i <property>\n  <name>yarn.resourcemanager.resource-tracker.address</name>\n  <value>'"$MASTER_NAME"':8025</value>\n</property>' $HADOOP_HOME/etc/hadoop/yarn-site.xml
+sed -i '30i <property>\n  <name>yarn.resourcemanager.scheduler.address</name>\n  <value>'"$MASTER_NAME"':8030</value>\n</property>' $HADOOP_HOME/etc/hadoop/yarn-site.xml
+sed -i '34i <property>\n  <name>yarn.resourcemanager.address</name>\n  <value>'"$MASTER_NAME"':8050</value>\n</property>' $HADOOP_HOME/etc/hadoop/yarn-site.xml
+
+# configure mapred-site.xml
+cp $HADOOP_HOME/etc/hadoop/mapred-site.xml.template $HADOOP_HOME/etc/hadoop/mapred-site.xml
+sed -i '20i <property>\n  <name>mapreduce.jobtracker.address</name>\n  <value>'"$MASTER_NAME"':54311</value>\n</property>' $HADOOP_HOME/etc/hadoop/mapred-site.xml
+sed -i '24i <property>\n  <name>mapreduce.framework.name</name>\n  <value>yarn</value>\n</property>' $HADOOP_HOME/etc/hadoop/mapred-site.xml
+
+---------------
+mapred
+
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+
+</configuration>
+
+---------
+hdfs
+
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+
+    <property>
+        <name>dfs.support.append</name>
+        <value>true</value>
+    </property>
+
+</configuration>
+
+-------
+yarn
+
+<?xml version="1.0"?>
+<configuration>
+
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+        <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+    </property>
+
+    <!-- To increase number of apps that can run in YARN -->
+    <property>
+        <name>yarn.nodemanager.resource.cpu-vcores</name>
+        <value>4</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>8192</value>
+    </property>
+    <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>512</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.pmem-check-enabled</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>false</value>
+</property>
+
+</configuration>
+
+--------
+
+core
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://borneo:8020</value>
+    <final>true</final>
+  </property>
+
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>${user.home}/hadoop_data</value>
+    <description>A base for other temporary directories.</description>
+  </property>
+
+</configuration>
